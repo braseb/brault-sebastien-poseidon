@@ -1,7 +1,10 @@
 package com.poseidon.app.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+//import javax.validation.constraints.NotBlank;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 import java.sql.Timestamp;
 
 

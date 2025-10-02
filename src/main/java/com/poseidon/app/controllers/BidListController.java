@@ -1,6 +1,9 @@
 package com.poseidon.app.controllers;
 
 import com.poseidon.app.domain.BidList;
+
+import jakarta.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,7 +38,7 @@ public class BidListController {
     }
 
     @GetMapping("/bidList/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+    public String showUpdateForm(@PathVariable Integer id, Model model) {
         // TODO: get Bid by Id and to model then show to the form
         return "bidList/update";
     }
@@ -48,7 +51,7 @@ public class BidListController {
     }
 
     @GetMapping("/bidList/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
+    public String deleteBid(@PathVariable Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
         return "redirect:/bidList/list";
     }

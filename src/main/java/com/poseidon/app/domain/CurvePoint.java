@@ -1,10 +1,11 @@
 package com.poseidon.app.domain;
 
-import org.hibernate.validator.constraints.Length;
+//import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+//import javax.validation.constraints.NotBlank;
+//import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 
