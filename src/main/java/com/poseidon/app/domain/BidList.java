@@ -3,6 +3,7 @@ package com.poseidon.app.domain;
 
 import java.sql.Timestamp;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +24,8 @@ public class BidList {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private short BidListId;
+    @Column(name = "bid_list_id")
+    private short bidListId;
     private String account;
     private String type;
     private double bidQuantity;
