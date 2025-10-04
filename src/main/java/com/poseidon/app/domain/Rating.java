@@ -1,5 +1,7 @@
 package com.poseidon.app.domain;
 
+import jakarta.persistence.Column;
+
 //import javax.validation.constraints.NotBlank;
 //import javax.validation.constraints.NotNull;
 
@@ -22,9 +24,12 @@ import jakarta.persistence.Id;
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private short Id;
+    private Integer id;
+    @Column(length = 125)
     private String moodyRating;
+    @Column(length = 125)
     private String sandPRating;
+    @Column(length = 125)
     private String fitchRating;
     private short orderNumber;
     

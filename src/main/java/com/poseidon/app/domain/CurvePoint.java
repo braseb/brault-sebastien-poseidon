@@ -24,8 +24,8 @@ import java.sql.Timestamp;
 public class CurvePoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private short Id;
-    private short CurveId;
+    private Integer id;
+    private Integer CurveId;
     private Timestamp asOfDate;
     private double term;
     private double value;

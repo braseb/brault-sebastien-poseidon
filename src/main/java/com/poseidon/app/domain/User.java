@@ -1,6 +1,7 @@
 package com.poseidon.app.domain;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,14 +13,18 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
+    @Column(length = 125, nullable = false)
     @NotBlank(message = "Username is mandatory")
     private String username;
+    @Column(length = 125, nullable = false)
     @NotBlank(message = "Password is mandatory")
     private String password;
+    @Column(length = 125, nullable = false)
     @NotBlank(message = "FullName is mandatory")
     private String fullname;
+    @Column(length = 125, nullable = false)
     @NotBlank(message = "Role is mandatory")
     private String role;
 
