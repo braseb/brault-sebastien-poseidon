@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-//import javax.validation.Valid;
-
 @Controller
 public class UserController {
     @Autowired
@@ -39,7 +37,7 @@ public class UserController {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
-            model.addAttribute("users", userRepository.findAll());
+            //model.addAttribute("users", userRepository.findAll());
             return "redirect:/user/list";
         }
         return "user/add";
