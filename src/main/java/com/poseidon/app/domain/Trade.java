@@ -1,16 +1,12 @@
 package com.poseidon.app.domain;
 
 import jakarta.persistence.Column;
-
-//import javax.validation.constraints.NotBlank;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,12 +16,11 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "trade")
 public class Trade {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer tradeId;
+    private Integer id;
     @Column(length = 30, nullable = false)
     @NotBlank
     private String account;
@@ -61,4 +56,9 @@ public class Trade {
     private String sourceListId;
     @Column(length = 125)
     private String side;
+    
+    public Trade(String account, String type) {
+        this.account = account;
+        this.type = type;
+    }
 }

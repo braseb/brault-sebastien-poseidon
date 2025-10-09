@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Optional;
 
-//@RunWith(SpringRunner.class)
+
 @SpringBootTest
 public class BidTests {
 
