@@ -1,5 +1,7 @@
 package com.poseidon.app.controllers;
 
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,11 @@ public class HomeController
 	public String adminHome(Model model)
 	{
 		return "redirect:/bidList/list";
+	}
+	
+	@GetMapping("/auth2/google")
+	public String googleHome(Principal user) {
+	    return user.toString();
 	}
 
 
