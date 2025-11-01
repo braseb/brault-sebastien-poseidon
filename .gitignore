@@ -3,7 +3,6 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 src/main/resources/application.properties
 src/main/resources/application-prod.properties
->>>>>>> 5097acf (Ignore the application-prod.properties)
 !**/src/main/**/target/
 !**/src/test/**/target/
 
