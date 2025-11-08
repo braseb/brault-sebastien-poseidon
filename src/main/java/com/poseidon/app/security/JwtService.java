@@ -1,6 +1,7 @@
 package com.poseidon.app.security;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +38,10 @@ public class JwtService {
         Date now = new Date();
         
         
-        
+        System.out.println("Création du token pour " + user.getUsername() + " avec rôle : " + user.getRole());
+
         return Jwts.builder()
-                .claim("roles", user.getRole())
+                .claim("role", "ROLE_" + user.getRole())
                 .subject(user.getUsername())
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + 60 * 10 * 1000))
@@ -55,6 +57,15 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+    
+    public String extractRole(String token){
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role", String.class);
     }
 
     public boolean validateToken(String token) {

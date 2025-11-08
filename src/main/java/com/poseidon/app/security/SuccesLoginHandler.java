@@ -25,10 +25,12 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SuccesLoginHandler implements AuthenticationSuccessHandler {
     
         
+    
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final PasswordEncoder passwordEncoder;
+   
 
     public SuccesLoginHandler(JwtService jwtService,
                               UserRepository userRepository,
@@ -44,16 +46,14 @@ public class SuccesLoginHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
         
-        //System.out.println(authentication.getDetails());
-        //System.out.println(authentication.getCredentials());
-        //System.out.println(authentication.getName());
+        
         System.out.println("principal : " + authentication.getPrincipal().toString());
         System.out.println((authentication instanceof OAuth2AuthenticationToken));
         System.out.println(authentication.getClass().getName());
         User user = null;
         
         if(authentication instanceof OAuth2AuthenticationToken){
-            //Principal principal = (Principal) authentication.getPrincipal();
+            
             OAuth2AuthenticationToken authToken = ((OAuth2AuthenticationToken) authentication);
             OAuth2AuthorizedClient authClient = this.authorizedClientService.loadAuthorizedClient(authToken.getAuthorizedClientRegistrationId(), authToken.getName());
             Map<String,Object> userAttributes = ((DefaultOAuth2User) authentication.getPrincipal()).getAttributes();
@@ -108,11 +108,17 @@ public class SuccesLoginHandler implements AuthenticationSuccessHandler {
         //cookie.setSecure(true);
         cookieSession.setMaxAge(0);
         response.addCookie(cookieSession);
+               
         
-        
-        //response.sendRedirect("/");
-        response.sendRedirect("/curvePoint/list");
-        
+        if (user.getRole().equals("ADMIN")) {
+            response.sendRedirect("/app/secure/article-details");
+        }else if (user.getRole().equals("USER")) {
+            response.sendRedirect("/curvePoint/list");
+        }else {
+            response.sendRedirect("/app/error");
+        }
+      
+       
     }
 
 }

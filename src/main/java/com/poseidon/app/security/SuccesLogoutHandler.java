@@ -26,10 +26,12 @@ public class SuccesLogoutHandler implements LogoutSuccessHandler {
         if (cookie != null) {
             cookie.setValue(null);
             cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
         }
         
-        response.addCookie(cookie);
-        response.sendRedirect("/login?logout");
+        response.sendRedirect("/app/login?logout=true");
+        //response.sendRedirect("/app/logout");
         
     }
     

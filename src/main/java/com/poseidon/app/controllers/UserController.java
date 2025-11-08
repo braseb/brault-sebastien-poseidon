@@ -3,6 +3,7 @@ package com.poseidon.app.controllers;
 import com.poseidon.app.domain.User;
 import com.poseidon.app.repositories.UserRepository;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;

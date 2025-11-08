@@ -22,18 +22,7 @@ import com.poseidon.app.repositories.UserRepository;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    //@Autowired
-    //private CustomUserDetailsService userDetailsService;
-    
-    //@Autowired
-    //JwtAuthFilter jwtAuthFilter;
-    
-    //@Autowired
-    //SuccesLoginHandler succesLoginHandler;
-    
-    //@Autowired
-    //SuccesLogoutHandler succesLogoutHandler;
+  
     
     @Bean
     SuccesLoginHandler succesLoginHandler(JwtService jwtService,
@@ -55,16 +44,24 @@ public class SecurityConfig {
                 //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/css/**", "/auth2/**").permitAll()
+                .requestMatchers("/app/login", "/login/oauth2/**", "/css/**", "/images/**", "/auth2/**", "/app/error", "/error").permitAll()
+                .requestMatchers("/user/**", "/app/secure/**").hasRole("ADMIN")
+                .requestMatchers("/trade/**", "/curvePoint/**", "/rating/**", "/bidList/**", "/ruleName/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                        //.loginPage("/app/login")
+                        .loginPage("/app/login")
                         .successHandler(succesLoginHandler)
                         .permitAll())
             .oauth2Login(t -> t.successHandler(succesLoginHandler)
-                                .permitAll())
-            .logout(log -> log.logoutSuccessHandler(succesLogoutHandler))
+                            .loginPage("/app/login")    
+                            .permitAll())
+            .logout(log ->  log
+                            .logoutUrl("/app/logout")
+                            .logoutSuccessHandler(succesLogoutHandler))
+            .exceptionHandling(ex -> ex
+                    .accessDeniedPage("/app/error") 
+                )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
             
             
