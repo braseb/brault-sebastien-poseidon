@@ -18,12 +18,13 @@ public class TradeTests {
 
 	@Test
 	public void tradeTest() {
-		Trade trade = new Trade("Trade Account", "Type");
+		Trade trade = new Trade("Trade Account", "Type", 1.0);
 
 		// Save
 		trade = tradeRepository.save(trade);
 		assertNotNull(trade.getId());
 		assertTrue(trade.getAccount().equals("Trade Account"));
+		assertEquals(1.0, trade.getBuyQuantity());
 		
 		// Update
 		trade.setAccount("Trade Account Update");

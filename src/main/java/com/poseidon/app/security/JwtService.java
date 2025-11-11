@@ -1,26 +1,14 @@
 package com.poseidon.app.security;
 
-import java.security.Key;
-import java.util.Collection;
+
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.crypto.SecretKey;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import com.poseidon.app.domain.User;
-
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureAlgorithm;
-import jakarta.annotation.PostConstruct;
 
 @Service
 public class JwtService {

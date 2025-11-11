@@ -1,10 +1,8 @@
 package com.poseidon.app.controllers;
 
-import com.poseidon.app.domain.BidList;
-import com.poseidon.app.repositories.BidListRepository;
-
+import com.poseidon.app.dto.BidListDto;
+import com.poseidon.app.services.BidListService;
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,52 +16,51 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class BidListController {
     
     @Autowired
-    BidListRepository bidListRepository;
+    BidListService bidListService;
 
     @GetMapping("/bidList/list")
     public String home(Model model)
     {
-       model.addAttribute("bidLists", bidListRepository.findAll());
+       model.addAttribute("bidLists", bidListService.getAll());
        return "bidList/list";
     }
 
     @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid) {
+    public String addBidForm(BidListDto bidListDto) {
         return "bidList/add";
     }
 
     @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model) {
+    public String validate(@Valid BidListDto bidListDto, BindingResult result, Model model) {
        if (result.hasErrors()){
-           model.addAttribute("bidList", bid);
+           model.addAttribute("bidListDto", bidListDto);
            return "bidList/add";
        }
-        bidListRepository.save(bid);
+       bidListService.save(bidListDto);
         
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable Integer id, Model model) {
-        model.addAttribute("bidList", bidListRepository.findById(id)
-                                        .orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id)));
+        model.addAttribute("bidListDto", bidListService.getBidListById(id));                         
         return "bidList/update";
     }
 
     @PostMapping("/bidList/update/{id}")
-    public String updateBid(@PathVariable Integer id, @Valid BidList bidList,
+    public String updateBid(@PathVariable Integer id, @Valid BidListDto bidListDto,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("bidList", bidList);
+            model.addAttribute("bidListDto", bidListDto);
             return "/bidList/update";
         }
-        bidListRepository.save(bidList);
+        bidListService.save(bidListDto);
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable Integer id, Model model) {
-        bidListRepository.deleteById(id);
+        bidListService.deleteBidListById(id);
         return "redirect:/bidList/list";
     }
 }

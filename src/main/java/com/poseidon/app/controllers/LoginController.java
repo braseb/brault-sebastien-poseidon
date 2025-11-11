@@ -1,10 +1,8 @@
 package com.poseidon.app.controllers;
 
 import com.poseidon.app.repositories.UserRepository;
-import com.poseidon.app.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;

@@ -1,10 +1,8 @@
 package com.poseidon.app.controllers;
 
-import com.poseidon.app.domain.RuleName;
-import com.poseidon.app.repositories.RuleNameRepository;
-
+import com.poseidon.app.dto.RuleNameDto;
+import com.poseidon.app.services.RuleNameService;
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,51 +14,50 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class RuleNameController {
     @Autowired
-    RuleNameRepository ruleNameRepository;
+    RuleNameService ruleNameService;
 
     @GetMapping("/ruleName/list")
     public String home(Model model)
     {
-        model.addAttribute("ruleNames", ruleNameRepository.findAll());
+        model.addAttribute("ruleNames", ruleNameService.getAll());
         return "ruleName/list";
     }
 
     @GetMapping("/ruleName/add")
-    public String addRuleForm(RuleName bid) {
+    public String addRuleForm(RuleNameDto ruleNameDto) {
         return "ruleName/add";
     }
 
     @PostMapping("/ruleName/validate")
-    public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
+    public String validate(@Valid RuleNameDto ruleNameDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("ruleName", ruleName);
+            model.addAttribute("ruleNameDto", ruleNameDto);
             return "/ruleName/add";
         }
-        ruleNameRepository.save(ruleName);
+        ruleNameService.save(ruleNameDto);
         return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable Integer id, Model model) {
-        model.addAttribute("ruleName", ruleNameRepository.findById(id)
-                                        .orElseThrow(() -> new IllegalArgumentException("Invalid rule name id:" + id)));
+        model.addAttribute("ruleNameDto", ruleNameService.getRuleNameById(id));
         return "ruleName/update";
     }
 
     @PostMapping("/ruleName/update/{id}")
-    public String updateRuleName(@PathVariable Integer id, @Valid RuleName ruleName,
+    public String updateRuleName(@PathVariable Integer id, @Valid RuleNameDto ruleNameDto,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("ruleName", ruleName);
+            model.addAttribute("ruleNameDto", ruleNameDto);
             return "/ruleName/update";
         }
-        ruleNameRepository.save(ruleName);
+        ruleNameService.save(ruleNameDto);
         return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable Integer id, Model model) {
-        ruleNameRepository.deleteById(id);
+        ruleNameService.deleteRuleNameById(id);
         return "redirect:/ruleName/list";
     }
 }

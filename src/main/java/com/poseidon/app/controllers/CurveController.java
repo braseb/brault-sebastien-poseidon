@@ -1,7 +1,7 @@
 package com.poseidon.app.controllers;
 
-import com.poseidon.app.domain.CurvePoint;
-import com.poseidon.app.repositories.CurvePointRepository;
+import com.poseidon.app.dto.CurvePointDto;
+import com.poseidon.app.services.CurvePointService;
 
 import jakarta.validation.Valid;
 
@@ -16,52 +16,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class CurveController {
+        
     @Autowired
-    CurvePointRepository curvePointRepository;
+    CurvePointService curvePointService;
 
     @GetMapping("/curvePoint/list")
     public String home(Model model)
     {
-        model.addAttribute("curvePoints", curvePointRepository.findAll());
+        model.addAttribute("curvePoints", curvePointService.getAll());
         return "curvePoint/list";
     }
 
     @GetMapping("/curvePoint/add")
-    public String addBidForm(CurvePoint bid) {
+    public String addBidForm(CurvePointDto curvePointDto) {
         return "curvePoint/add";
     }
 
     @PostMapping("/curvePoint/validate")
-    public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
+    public String validate(@Valid CurvePointDto curvePointDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("curvePoint", curvePoint);
+            model.addAttribute("curvePointDto", curvePointDto);
             return "curvePoint/add";
         }
-        curvePointRepository.save(curvePoint);
+        curvePointService.save(curvePointDto);
         return "redirect:/curvePoint/list";
     }
 
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable Integer id, Model model) {
-        model.addAttribute("curvePoint", curvePointRepository.findById(id)
-                                        .orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id)));
+        model.addAttribute("curvePointDto", curvePointService.getCurvePointById(id));
         return "curvePoint/update";
     }
 
     @PostMapping("/curvePoint/update/{id}")
-    public String updateBid(@PathVariable Integer id, @Valid CurvePoint curvePoint,
+    public String updateBid(@PathVariable Integer id, @Valid CurvePointDto curvePointDto,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("curvePoint", curvePoint);
+            model.addAttribute("curvePoint", curvePointDto);
             return "curvePoint/update";
         }
-        curvePointRepository.save(curvePoint);
+        curvePointService.save(curvePointDto);
         return "redirect:/curvePoint/list";
     }
 
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable Integer id, Model model) {
-        curvePointRepository.deleteById(id);
+        curvePointService.deleteCurvePointById(id);
         return "redirect:/curvePoint/list";
     }
 }

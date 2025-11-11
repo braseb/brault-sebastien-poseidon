@@ -9,12 +9,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.poseidon.app.exceptions.RoleNotFoundException;
 
+import java.io.IOException;
+import java.util.List;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -30,12 +28,9 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+            throws ServletException, IOException, RoleNotFoundException {
 
-        //String header = request.getHeader("Authorization");
         
-        //if (header != null && header.startsWith("Bearer ")) {
-        //    String token = header.substring(7);
         String token = extractCookie(request, "JWT_TOKEN");
                 
         if (token != null && jwtService.validateToken(token)) {
@@ -43,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter{
                 String role = jwtService.extractRole(token);
                 System.out.println("role : " + jwtService.extractRole(token));
                 if (role == null || role.isBlank()) {
-                    role = "ROLE_AUCUN";
+                    throw new RoleNotFoundException("Role not found");
                 }
                 
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(

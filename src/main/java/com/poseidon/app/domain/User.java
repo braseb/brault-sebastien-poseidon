@@ -34,7 +34,7 @@ public class User {
     @NotBlank(message = "Role is mandatory")
     private String role;
 
-    public Integer getId() {
+    /*public Integer getId() {
         return id;
     }
 
@@ -72,5 +72,5 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
-    }
+    }*/
 }
