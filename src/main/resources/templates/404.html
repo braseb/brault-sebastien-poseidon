@@ -4,9 +4,8 @@
       <title>Spring Boot</title>
 </head>
 <body>
-   <h3>Access Denied Exception</h3>
+   <h3>Not found Exception</h3>
    <div>
-	    Logged in user: <b th:inline="text"  class="user" sec:authorize="isAuthenticated()" sec:authentication="principal.username"></b>
 	    <form th:action="@{/app/logout}" method="POST">
 	         <input type="submit" value="Logout"/>
 	    </form>
