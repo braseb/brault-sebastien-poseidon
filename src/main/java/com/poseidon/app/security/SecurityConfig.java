@@ -9,13 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import com.poseidon.app.repositories.UserRepository;
+import com.poseidon.app.services.UserService;
 
 
 
@@ -26,10 +24,9 @@ public class SecurityConfig {
     
     @Bean
     SuccesLoginHandler succesLoginHandler(JwtService jwtService,
-                                       UserRepository userRepository,
-                                       OAuth2AuthorizedClientService clientService,
-                                       PasswordEncoder passwordEncoder) {
-        return new SuccesLoginHandler(jwtService, userRepository, clientService, passwordEncoder);
+                                           UserService userService
+                                          ) {
+        return new SuccesLoginHandler(jwtService, userService);
     }
     
     @Bean

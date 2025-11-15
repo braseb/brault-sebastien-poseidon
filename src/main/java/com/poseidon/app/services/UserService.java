@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.poseidon.app.domain.User;
 import com.poseidon.app.dto.UserDto;
@@ -15,6 +16,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+    PasswordEncoder passwordEncoder;
     
     public UserDto save(UserDto userDto) throws UserAlreadyExistException {
         
@@ -80,6 +84,17 @@ public class UserService {
     public User getUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                     .orElseThrow(() ->  new UsernameNotFoundException(String.format("User with username {%s} not found", username)));
+    }
+    
+    public User getUserByUsernameElseCreateUserIfOAuth2(String username, String fullName)  {
+        return userRepository.findByUsername(username)
+                                .orElseGet(() -> {User newUser = new User(null, 
+                                        username, 
+                                        passwordEncoder.encode("NopasswordOAuth2"),
+                                        fullName, 
+                                        "USER");
+                                return userRepository.save(newUser);
+                                });
     }
     
 }
