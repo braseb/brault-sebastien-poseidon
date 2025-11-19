@@ -32,9 +32,7 @@ public class SuccesLoginHandler implements AuthenticationSuccessHandler {
                              ) {
         this.jwtService = jwtService;
         this.userService = userService;
-        //this.authorizedClientService = authorizedClientService;
-        //this.passwordEncoder = passwordEncoder;
-    }
+        }
     
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -75,7 +73,7 @@ public class SuccesLoginHandler implements AuthenticationSuccessHandler {
         Cookie cookie = new Cookie("JWT_TOKEN", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        //cookie.setSecure(true);
+        //cookie.setSecure(true); // activate in production
         cookie.setMaxAge(3600);
         response.addCookie(cookie);
         
@@ -83,10 +81,9 @@ public class SuccesLoginHandler implements AuthenticationSuccessHandler {
         Cookie cookieSession = new Cookie("JSESSIONID", null);
         cookieSession.setHttpOnly(true);
         cookieSession.setPath("/");
-        //cookie.setSecure(true);
+        //cookie.setSecure(true); // activate in production
         cookieSession.setMaxAge(0);
-        response.addCookie(cookieSession);
-               
+        response.addCookie(cookieSession);     
         
         if (user.getRole().equals("ADMIN")) {
             response.sendRedirect("/app/secure/article-details");

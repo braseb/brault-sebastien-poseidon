@@ -24,8 +24,22 @@ public class UserService {
         
         User user;
         boolean newUser = (userDto.id() == null);
-        if (userDto.id() != null && userRepository.existsById(userDto.id())) {
+        if (userDto.id() != null && 
+                userRepository.existsById(userDto.id())){
+            
             user = userRepository.findById(userDto.id()).orElseThrow();
+            
+            //Check if another user have this username
+            if (userRepository.existsByUsername(userDto.username())){
+                
+                User userExistByUserName = userRepository.findByUsername(userDto.username()).orElseThrow();
+                
+                if (userExistByUserName.getId() != userDto.id()) {
+                    throw new UserAlreadyExistException("User " + userDto.username() + " already exist");
+                }
+                
+            }
+            
             user.setUsername(userDto.username());
             user.setPassword(userDto.password());
             user.setFullname(userDto.fullname());

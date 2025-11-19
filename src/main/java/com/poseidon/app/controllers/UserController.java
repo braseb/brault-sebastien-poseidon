@@ -1,6 +1,7 @@
 package com.poseidon.app.controllers;
 
 import com.poseidon.app.dto.UserDto;
+import com.poseidon.app.exceptions.UserAlreadyExistException;
 import com.poseidon.app.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,14 @@ public class UserController {
                                              encoder.encode(userDto.password()),
                                              userDto.fullname(),
                                              userDto.role());
-            userService.save(userSave);
-            return "redirect:/user/list";
+            try {
+                userService.save(userSave);
+                return "redirect:/user/list";
+            }catch (UserAlreadyExistException e) {
+                model.addAttribute("alreadyExist", "The user already exist");
+                return "user/add";
+            }
+            
         }
         return "user/add";
     }
@@ -69,16 +76,19 @@ public class UserController {
                                         encoder.encode(userDto.password()),
                                         userDto.fullname(),
                                         userDto.role());
-        
-        userService.save(userDtoSave);
-        //model.addAttribute("users", userService.findAll());
-        return "redirect:/user/list";
+        try {
+            userService.save(userDtoSave);
+            return "redirect:/user/list";
+        }catch (UserAlreadyExistException e) {
+            model.addAttribute("alreadyExist", "The user already exist")
+                    .addAttribute("id", id);
+            return "/user/update";
+        }
     }
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable Integer id, Model model) {
         userService.deleteUserById(id);
-        //model.addAttribute("users", userService.findAll());
         return "redirect:/user/list";
     }
 }

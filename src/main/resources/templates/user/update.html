@@ -12,6 +12,7 @@
 	<div class="row">
 		<h2>Update User</h2>
 	</div>
+	<div th:if="${alreadyExist}" th:text="${alreadyExist}" style="color:red;">></div>
 
 	<div class="row">
 		<form action="#" th:action="@{/user/update/{id}(id=${userDto.id})}" th:object="${userDto}" method="post" class="form-horizontal" style="width: 100%">

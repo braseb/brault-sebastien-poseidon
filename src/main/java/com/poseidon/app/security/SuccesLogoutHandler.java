@@ -19,9 +19,7 @@ public class SuccesLogoutHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
-        
-        System.out.println(">>> LogoutSuccessHandler called !");
-        
+                
         Cookie cookie = extractCookie(request, "JWT_TOKEN");
         if (cookie != null) {
             cookie.setValue(null);
@@ -30,9 +28,7 @@ public class SuccesLogoutHandler implements LogoutSuccessHandler {
             response.addCookie(cookie);
         }
         
-        response.sendRedirect("/app/login?logout=true");
-        //response.sendRedirect("/app/logout");
-        
+        response.sendRedirect("/app/login?logout=true");    
     }
     
     private Cookie extractCookie(HttpServletRequest request, String cookieName) {
