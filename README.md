@@ -5,7 +5,7 @@
 [![Maven](https://img.shields.io/badge/Maven-Project-orange)](https://maven.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
 
-**Poseidon** est une application web sécurisée développée avec **Spring Boot 3**, destinée à la gestion d’entités financières. L’application utilise **JWT** pour l’authentification stateless avec un cookie contenant le token de session et supporte la connexion via **OAuth2 (Google)**, tout en maintenant la gestion des rôles internes en base de données (`ADMIN` et `USER`).
+**Poseidon** est une application web sécurisée développée avec **Spring Boot 3**, destinée à la gestion d’entités financières. L’application utilise **JWT** pour l’authentification stateless avec un cookie contenant le token de session et supporte la connexion via **OAuth2 (Google)**
 
 ---
 
@@ -197,6 +197,72 @@ Tous les endpoints sont accessibles via les **contrôleurs MVC** et permettent l
 ```bash
 mvn test
 ```
+
+---
+
+## Lancer l'application
+
+### Prérequis
+- Java 21 installé
+- Maven installé (pour le lancement via source)
+- MySQL avec la base `demo` configurée
+- Configuration des accès à la base dans `src/main/resources/application.properties`
+
+### Lancer depuis le code source avec Maven
+1. Cloner le dépôt :  
+
+```bash
+git clone <URL_DU_REPO>
+cd Poseidon
+```
+2. Lancer l'application : 
+ 
+```bash
+./mvnw spring-boot:run
+```
+ou avec Maven classique :
+  
+```bash
+mvn spring-boot:run
+```
+3. Accéder à l'application via :
+  
+```
+http://localhost:8080/
+```
+
+### Lancer avec le `.jar`
+1. Compiler le projet pour générer le `.jar` :
+  
+```bash
+./mvnw clean package
+```
+ou avec Maven classique :
+  
+```bash
+mvn clean package
+```
+2. Lancer l'application :
+  
+```bash
+java -jar target/Poseidon-1.0.0.jar
+```
+3. L'application sera disponible sur :
+  
+```
+http://localhost:8080/
+```
+
+---
+
+## Sécurité
+- Authentification stateless avec JWT
+- Stockage du `username` et du `role` dans le token
+- Clé secrète configurée dans `application.properties` :
+```properties
+jwt.secret=UneCleTresLonguePourHS256DoitFaireAuMoins32Caracteres
+```
+- Authentification Google OAuth2 (rôle par défaut `USER`)
 
 ---
 
