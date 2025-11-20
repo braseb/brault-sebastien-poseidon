@@ -33,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @param username the username of the user attempting to authenticate
      * @return a {@link UserDetails} object containing the user's credentials and roles 
      * @throws UsernameNotFoundException if no user with the given name is found 
-     * @see UserRepository#findByUsername(String) 
+     * @see UserService#getUserByUsername(String) 
      */
     
     @Override

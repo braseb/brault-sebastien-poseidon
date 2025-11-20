@@ -16,6 +16,29 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Handles successful authentication for both standard username/password and OAuth2 logins.
+ * 
+ * <p>This handler is responsible for:
+ * <ul>
+ *     <li>Creating or updating the user in the database in case of OAuth2 login.</li>
+ *     <li>Generating a JWT token for the authenticated user.</li>
+ *     <li>Setting the JWT token in an HTTP-only cookie for stateless authentication.</li>
+ *     <li>Clearing any existing JSESSIONID cookie to enforce stateless behavior.</li>
+ *     <li>Redirecting the user to the appropriate page based on their role (ADMIN or USER).</li>
+ * </ul>
+ * 
+ * <p>Security considerations:
+ * <ul>
+ *     <li>The JWT token is stored in a HttpOnly cookie to mitigate XSS attacks.</li>
+ *     <li>The application is stateless; CSRF protection is disabled.</li>
+ * </ul>
+ * 
+ * <p>Usage:
+ * This class is automatically invoked by Spring Security after a successful authentication.
+ * It supports both standard form login and OAuth2 login (e.g., Google OAuth2).
+ */
+
 @Component
 public class SuccesLoginHandler implements AuthenticationSuccessHandler {
     
@@ -23,9 +46,14 @@ public class SuccesLoginHandler implements AuthenticationSuccessHandler {
     
     private final JwtService jwtService;
     private final UserService userService;
-    //private final PasswordEncoder passwordEncoder;
-   
-
+       
+    /**
+     * Constructs a SuccesLoginHandler with required dependencies.
+     * 
+     * @param jwtService the service responsible for creating JWT tokens
+     * @param userService the service responsible for user management
+     */
+    
     public SuccesLoginHandler(JwtService jwtService,
                               UserService userService
                               
@@ -34,6 +62,34 @@ public class SuccesLoginHandler implements AuthenticationSuccessHandler {
         this.userService = userService;
         }
     
+    /**
+     * Called when a user has been successfully authenticated.
+     * 
+     * <p>If the authentication is via OAuth2:
+     * <ul>
+     *     <li>Extracts the user's email as username and full name from the OAuth2 attributes.</li>
+     *     <li>Creates a new user in the database if they do not already exist.</li>
+     *     <li>Updates the user's full name in the database if it has changed.</li>
+     * </ul>
+     * 
+     * <p>If the authentication is standard username/password:
+     * <ul>
+     *     <li>Retrieves the user by username from the database.</li>
+     * </ul>
+     * 
+     * <p>After retrieving or creating the user:
+     * <ul>
+     *     <li>Generates a JWT token and sets it in an HTTP-only cookie.</li>
+     *     <li>Removes any existing JSESSIONID cookie to enforce stateless authentication.</li>
+     *     <li>Redirects the user to the appropriate page based on their role.</li>
+     * </ul>
+     *
+     * @param request the HttpServletRequest
+     * @param response the HttpServletResponse
+     * @param authentication the Authentication object containing user details
+     * @throws IOException if an input/output error occurs during redirect
+     * @throws ServletException if a servlet-specific error occurs
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
